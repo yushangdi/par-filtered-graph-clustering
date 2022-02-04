@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+./par_tmfg/tmfg
+./hac/general_hac/linkage
+.DS_Store
+.vscode/*
