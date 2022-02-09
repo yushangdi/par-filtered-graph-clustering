@@ -18,7 +18,7 @@ Each folder contains an implementation that we tested.
 
 ## Installation Requirement
 
-* g++ = 7.5.0 with support for Cilk Plus
+* g++ = 7.5.0 
 * make
 * [boost library](https://www.boost.org/)
 
