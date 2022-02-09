@@ -73,3 +73,9 @@ cd par_tmfg
 make
 PARLAY_NUM_THREADS=${wk} numactl -i all ./tmfg iris-R iris 150 0 exact 0 1
 ```
+
+## datasets
+
+The UCR data sets can be downloaded from [here](https://www.cs.ucr.edu/~eamonn/time_series_data_2018/)
+The stock data can be obtained using the [Yahoo Finance API](https://pypi.org/project/yfinance/). Our data is obtained in Nov. 2021.
+
