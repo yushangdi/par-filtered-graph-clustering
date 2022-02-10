@@ -76,6 +76,9 @@ PARLAY_NUM_THREADS=${wk} numactl -i all ./tmfg iris-R iris 150 0 exact 0 1
 
 ## datasets
 
-The UCR data sets can be downloaded from [here](https://www.cs.ucr.edu/~eamonn/time_series_data_2018/)
+The UCR data sets can be downloaded from [here](https://www.cs.ucr.edu/~eamonn/time_series_data_2018/).
 The stock data can be obtained using the [Yahoo Finance API](https://pypi.org/project/yfinance/). Our data is obtained in Nov. 2021.
+
+You can also download our data [here](https://console.cloud.google.com/storage/browser/par-filtered-graph-clustering).
+There is a readme.md in the data repository linked above that explains how to use the datasets.
 
