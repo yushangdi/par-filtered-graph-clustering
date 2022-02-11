@@ -106,3 +106,17 @@ cd Aste
 matlab -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_PMFG("iris", "../datasets/", "outputs"); exit'  -logfile outputs/iris_pmfg_timing.txt
 matlab -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG("iris", "../datasets/", "outputs"); exit'  -logfile outputs/iris_tmfg_timing.txt
 ```
+
+## To run KMeans:
+
+```python
+from sklearn.cluster import SpectralClustering
+from sklearn.cluster import KMeans
+
+KMeans(n_clusters=k, random_state=0).fit(X)
+
+SpectralClustering(n_clusters=k, affinity="nearest_neighbors",
+                                n_neighbors=n_neighbor,
+                                assign_labels='discretize',
+                                random_state=1, n_jobs=worker).fit(X)
+```

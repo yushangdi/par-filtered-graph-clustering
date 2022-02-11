@@ -38,3 +38,5 @@ hac/general_hac/outputs/*
 .vscode/*
 Aste/outputs/*
 par_tmfg/outputs/*
+
+*/.DS_Store
