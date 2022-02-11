@@ -31,7 +31,10 @@
 *.out
 *.app
 
-./par_tmfg/tmfg
-./hac/general_hac/linkage
+par_tmfg/tmfg
+hac/general_hac/linkage
+hac/general_hac/outputs/*
 .DS_Store
 .vscode/*
+Aste/outputs/*
+par_tmfg/outputs/*

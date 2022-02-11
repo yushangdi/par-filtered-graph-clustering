@@ -6,7 +6,6 @@
 
 using namespace std;
 
-// ./linkage ../../par_tmfg/datasets/UCR/Mallat-D.csv 2400 outputs/Mallat_dendro comp
 int main(int argc, char *argv[]) {
     char* filename = argv[1];
     std::size_t n = atoi(argv[2]);

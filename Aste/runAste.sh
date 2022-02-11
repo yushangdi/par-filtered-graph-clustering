@@ -20,7 +20,7 @@
 # "UWaveGestureLibraryY"
 # )
 
-datasets=("iris-test")
+datasets=("iris")
 OUTPUTDIR="outputs"
 INPUTDIR="../datasets/"
 MATLAB="matlab"
@@ -33,7 +33,7 @@ for dataset in "${datasets[@]}"; do
 done
 
 for dataset in "${datasets[@]}"; do
-    command="${MATLAB}  -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG(\"${dataset}\", \"${INPUTDIR}\", \"${OUTPUTDIR}\"); exit'  -logfile ${OUTPUTDIR}/${dataset}_tmfg_timing.txt"
+    command="${MATLAB} -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG(\"${dataset}\", \"${INPUTDIR}\", \"${OUTPUTDIR}\"); exit'  -logfile ${OUTPUTDIR}/${dataset}_tmfg_timing.txt"
     echo "$command"
     eval "$command"
 done
