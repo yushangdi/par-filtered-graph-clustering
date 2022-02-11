@@ -27,13 +27,13 @@ MATLAB="matlab"
 
 [ -d ${OUTPUTDIR} ] || mkdir ${OUTPUTDIR}
 for dataset in "${datasets[@]}"; do
-    command="${MATLAB} -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR(\"${dataset}\", \"${INPUTDIR}\", \"${OUTPUTDIR}\"); exit'  -logfile ${OUTPUTDIR}/${dataset}_timing.txt"
+    command="${MATLAB} -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_PMFG(\"${dataset}\", \"${INPUTDIR}\", \"${OUTPUTDIR}\"); exit'  -logfile ${OUTPUTDIR}/${dataset}_pmfg_timing.txt"
     echo "$command"
     eval "$command"
 done
 
 for dataset in "${datasets[@]}"; do
-    command="${MATLAB}  -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG(\"${dataset}\", \"${INPUTDIR}\", \"${OUTPUTDIR}\"); exit'  -logfile ${OUTPUTDIR}/${dataset}_timing.txt"
+    command="${MATLAB}  -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG(\"${dataset}\", \"${INPUTDIR}\", \"${OUTPUTDIR}\"); exit'  -logfile ${OUTPUTDIR}/${dataset}_tmfg_timing.txt"
     echo "$command"
     eval "$command"
 done
