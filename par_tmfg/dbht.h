@@ -121,15 +121,9 @@ struct DBHTTMFG{
     }
 
     inline T getW(vtx i, vtx j){
-// #ifdef DEBUG
-//         if(i==j){
-//             cout << "i==j in getW" << endl;
-//         }
-// #endif
-        //{return W[i*n + j];}
         return W->get(i,j);
     }
-    // inline T getD(T w){return sqrt(2*(1-w));}//TODO: CHANGE! }
+
     inline T getD(vtx i, vtx j){
         if(D==nullptr){
             if(i==j) return 0;
@@ -157,35 +151,34 @@ struct DBHTTMFG{
         typedef std::pair<int, int> Edge;
 
         // //prepare adj matrix, inlcude zero weight edges
-        const std::size_t num_nodes = n;
-        std::size_t num_arcs = 3*n-6;
-        vector<Edge> edge_array = vector<Edge>(num_arcs);
-        vector<T> weights = vector<T>(num_arcs);
-        for(size_t i=0;i<num_arcs;i++){ //TODO: parallel_for
-            vtx a = get<0>(P[i]); vtx b = get<1>(P[i]);
-            edge_array[i] = Edge(a, b);
-            weights[i] = getD(a, b);
-        }
-        graph_t g(edge_array.begin(), edge_array.end(), weights.begin(), num_nodes);
-
-        //prepare adj matrix, not inlcude zero weight edges
         // const std::size_t num_nodes = n;
         // std::size_t num_arcs = 3*n-6;
-        // auto inds = parlay::delayed_seq<bool>(num_arcs, [&](std::size_t i){
-        //     return getD(get<0>(P[i]), get<1>(P[i])) > 0;
-        // });
-        // auto pos_inds = parlay::pack_index(inds);
-        // num_arcs = pos_inds.size();
-
         // vector<Edge> edge_array = vector<Edge>(num_arcs);
         // vector<T> weights = vector<T>(num_arcs);
-        // //TODO: parallel_for
-        // parlay::parallel_for(0, num_arcs, [&](size_t i){ //for(size_t i=0;i<num_arcs;i++){
-        //     vtx a = get<0>(P[pos_inds[i]]); vtx b = get<1>(P[pos_inds[i]]);
+        // for(size_t i=0;i<num_arcs;i++){ //TODO: parallel_for
+        //     vtx a = get<0>(P[i]); vtx b = get<1>(P[i]);
         //     edge_array[i] = Edge(a, b);
         //     weights[i] = getD(a, b);
-        // });
+        // }
         // graph_t g(edge_array.begin(), edge_array.end(), weights.begin(), num_nodes);
+
+        //prepare adj matrix, not inlcude zero weight edges
+        const std::size_t num_nodes = n;
+        std::size_t num_arcs = 3*n-6;
+        auto inds = parlay::delayed_seq<bool>(num_arcs, [&](std::size_t i){
+            return getD(get<0>(P[i]), get<1>(P[i])) > 0;
+        });
+        auto pos_inds = parlay::pack_index(inds);
+        num_arcs = pos_inds.size();
+
+        vector<Edge> edge_array = vector<Edge>(num_arcs);
+        vector<T> weights = vector<T>(num_arcs);
+        parlay::parallel_for(0, num_arcs, [&](size_t i){ //for(size_t i=0;i<num_arcs;i++){
+            vtx a = get<0>(P[pos_inds[i]]); vtx b = get<1>(P[pos_inds[i]]);
+            edge_array[i] = Edge(a, b);
+            weights[i] = getD(a, b);
+        });
+        graph_t g(edge_array.begin(), edge_array.end(), weights.begin(), num_nodes);
 
         // cout << "build: " << t1.next() << endl;
 
