@@ -68,18 +68,18 @@ cout << "hierarchy total: "<< t.next() << endl;
 
 
 if(method == "exact" || method == "naive"){
-    computer.outputP(dsname + "-" + method + "-P-1");
-    clusterer->outputDendro(dsname + "-" + method + "-Z-1" );
+    computer.outputP("./outputs/Ps/" + dsname + "-" + method + "-P-1");
+    clusterer->outputDendro("./outputs/Zs/" + dsname + "-" + method + "-Z-1" );
 }else{
-    computer.outputP(dsname + "-" + method + "-P-" + to_string(THRESHOLD) );
-    clusterer->outputDendro(dsname + "-" + method + "-Z-" + to_string(THRESHOLD));
+    computer.outputP("./outputs/Ps/" + dsname + "-" + method + "-P-" + to_string(THRESHOLD) );
+    clusterer->outputDendro("./outputs/Zs/" + dsname + "-" + method + "-Z-" + to_string(THRESHOLD));
 }
 
 }
 
 int main(int argc, char *argv[]) {
 char* filename = argv[1];
-bool use_heap = 0;
+bool use_heap = 1;
 string dsname = argv[2];
 size_t n = atoi(argv[3]);
 char* distance_filename = argv[4]; //if 0, use sqrt(2*(1-w)) by default

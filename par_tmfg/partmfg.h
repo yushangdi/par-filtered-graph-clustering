@@ -199,13 +199,13 @@ struct ParTMFG{
     sequence<heapT> heaps;
     sequence<heapEle> heap_buffer;
     sequence<size_t> heap_LR;
-    // sequence<size_t> heap_R;
-    // sequence<size_t> heap_map; //map from face id to start location in heap_buffer, used for compact optimization
-    // can we optimize the heap, since we only need heapify and pop?
-    // sort and move is not optimimal, because we might need only a few pop
+    bool use_sorted_list = false; // change to input
+    sequence<sequence<heapEle>> fv_heaps; //face_vertex_heaps
+
 
     //allocate space for heap
     void initHeap();
+    void initSortedList();
     void initGainArrayHeap();
     void updateGainArrayHeap(sequence<size_t> &insert_list);
 

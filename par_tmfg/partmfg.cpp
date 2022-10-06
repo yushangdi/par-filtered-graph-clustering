@@ -109,7 +109,7 @@ void ParTMFG<T, PROF>::updateGainArrayHeap(sequence<size_t> &insert_list){
                 vtx new_v = result.second;
                 max_clique_gains[i] = make_tuple(new_v, result.first, i);
                 size_t num_faces = pbbs::write_add(&vtx_to_face_inds[new_v], 1);
-                face_store[num_faces-1+n*new_v] = i; 
+                face_store[num_faces-1+max_face_num*new_v] = i; 
             });
         });
     }
@@ -261,13 +261,21 @@ void ParTMFG<T, PROF>::init(){
         peo_ind = 4;
 
         if(use_heap) initHeap();
+        if(use_sorted_list) initSortedList();
     }
 
 template<class T, class PROF> 
 void ParTMFG<T, PROF>::initHeap(){
     heap_buffer = sequence<heapEle>::uninitialized(3*n*n); 
     heap_LR = sequence<size_t>::uninitialized(3*n*n);
-    heaps=sequence<heapT>::uninitialized(n);
+    heaps=sequence<heapT>::uninitialized(3*n);
+}
+
+template<class T, class PROF> 
+void ParTMFG<T, PROF>::initSortedList(){
+    // heap_buffer = sequence<heapEle>::uninitialized(3*n*n); 
+    // heap_LR = sequence<size_t>::uninitialized(3*n*n);
+    fv_heaps=sequence<sequence<heapEle>>::uninitialized(n);
 }
 
 template<class T, class PROF> 
