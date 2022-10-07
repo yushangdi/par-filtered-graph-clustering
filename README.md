@@ -77,7 +77,7 @@ PARLAY_NUM_THREADS=`wk` numactl -i all ./tmfg `S` `output` `n` `D` `method` `pre
 * `wk` is the number of workers to use
 * `numactl -i all` is optional 
 * `S` is the file name of the input similarity matrix
-* `output` is the file name prefix of the output file for the resulting dendrogram (-Z) and the resulting TMFG (-P)
+* `output` is the file name prefix of the output file for the resulting dendrogram (-Z) and the resulting TMFG (-P). The outputs are going to be saved folders "par_tmfg/outputs/Ps/" and "par_tmfg/outputs/Zs/", so these two folders should be created in advance.
 * `n` is the number of data points
 * `D` is the file name of the input dissimilarity matrix. If D=0, will use D = sqrt(2(1-s))
 * `method` can be "exact" or "prefix".
