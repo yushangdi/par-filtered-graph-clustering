@@ -16,9 +16,10 @@ datasets=("Mallat"
 "ShapesAll"
 "SonyAIBORobotSurface2"
 "FreezerSmallTrain"
+"Crop"
+"ElectricDevices"
 )
-# "Crop"
-# "ElectricDevices"
+
 
 sizes=(
     2400
@@ -37,28 +38,22 @@ sizes=(
     1200
     980
     2878
+    19412
+    16160
 )
 
 OUTPUTDIR="outputs/cdbht"
 INPUTDIR="~/datasets/UCR"
 
 
-workers=(96 1) 
-# 48 36 24 12 4 
+workers=(96 48 36 24 12 4 1) 
 round=3
 prefixs=(2 5 10 30 50)
 
-# datasets=("iris-R")
-# sizes=(150)
 # OUTPUTDIR="outputs"
 # INPUTDIR="../datasets"
 
 [ -d ${OUTPUTDIR} ] || mkdir ${OUTPUTDIR}
-
-# workers=(1)
-# prefixs=(2 5)
-
-# round=1
 
 for wk in "${workers[@]}"; do
     ind=0

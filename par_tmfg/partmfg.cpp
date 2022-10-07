@@ -261,21 +261,18 @@ void ParTMFG<T, PROF>::init(){
         peo_ind = 4;
 
         if(use_heap) initHeap();
-        if(use_sorted_list) initSortedList();
     }
 
 template<class T, class PROF> 
 void ParTMFG<T, PROF>::initHeap(){
     heap_buffer = sequence<heapEle>::uninitialized(3*n*n); 
+    if(use_sorted_list){
+        sorted_list_pointer=sequence<size_t>(3*n, 0);
+    }else{
     heap_LR = sequence<size_t>::uninitialized(3*n*n);
     heaps=sequence<heapT>::uninitialized(3*n);
-}
-
-template<class T, class PROF> 
-void ParTMFG<T, PROF>::initSortedList(){
-    // heap_buffer = sequence<heapEle>::uninitialized(3*n*n); 
-    // heap_LR = sequence<size_t>::uninitialized(3*n*n);
-    fv_heaps=sequence<sequence<heapEle>>::uninitialized(n);
+        // heaps=sequence<heapT>(3*n); for PAM
+    }
 }
 
 template<class T, class PROF> 

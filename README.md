@@ -32,7 +32,7 @@ After boost is installed, set the BOOST_ROOT variable in par_tmfg/Makefile to th
 ## Input
 
 The input to both implementations is a symmetric matrix. 
-The format of the file is space separated numbers.
+The format of the file is a binary file with $n^2$ double numbers.
 An example file is in the `dataset` folder.
 
 ## Datasets
