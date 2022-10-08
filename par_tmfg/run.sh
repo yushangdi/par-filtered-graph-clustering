@@ -1,13 +1,14 @@
 #!/bin/bash
 
-datasets=("Mallat"
+datasets=(
+"Mallat"
 "UWaveGestureLibraryAll"
 "NonInvasiveFetalECGThorax2"
 "MixedShapesRegularTrain"
 "MixedShapesSmallTrain"
 "ECG5000"
 "NonInvasiveFetalECGThorax1"
-"MoteStrain"
+"StarLightCurves"
 "HandOutlines"
 "UWaveGestureLibraryX"
 "CBF"
@@ -29,7 +30,7 @@ sizes=(
     2525
     5000
     3765
-    1272
+    9236
     1370
     4478
     930
@@ -48,7 +49,7 @@ INPUTDIR="~/datasets/UCR"
 
 workers=(96 48 36 24 12 4 1) 
 round=3
-prefixs=(2 5 10 30 50)
+prefixs=(2 5 10 30 50 200)
 
 # OUTPUTDIR="outputs"
 # INPUTDIR="../datasets"
