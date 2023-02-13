@@ -55,6 +55,8 @@ prefixs=(2 5 10 30 50 200)
 # INPUTDIR="../datasets"
 
 [ -d ${OUTPUTDIR} ] || mkdir ${OUTPUTDIR}
+[ -d "outputs/Ps" ] || mkdir "outputs/Ps"
+[ -d "outputs/Zs" ] || mkdir "outputs/Zs"
 
 for wk in "${workers[@]}"; do
     ind=0
