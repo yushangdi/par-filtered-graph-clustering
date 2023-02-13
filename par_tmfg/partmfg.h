@@ -226,11 +226,11 @@ struct ParTMFG{
         pf->incFindMinNum();
         heapEle ele;
         do {
-#ifdef DEBUG
-    if(heaps[i].size()==0){
-        cout << "0 size heap!" <<endl;
-    }
-#endif
+// #ifdef DEBUG
+//     if(heaps[i].size == 0){
+//         cout << "0 size heap!" <<endl;
+//     }
+// #endif
             if(use_sorted_list){ 
                 size_t ind = sorted_list_pointer[i];
                 sorted_list_pointer[i]++;
@@ -269,6 +269,7 @@ struct ParTMFG{
         // parlay::sort_inplace(make_slice(heap_buffer).cut(i*n, i*n+vertex_num));
         // parlay::internal::seq_sort_inplace(make_slice(heap_buffer).cut(i*n, i*n+vertex_num), std::less<heapEle>{}, false);
         parlay::internal::quicksort(make_slice(heap_buffer).cut(i*n, i*n+vertex_num), std::less<heapEle>{});
+        sorted_list_pointer[i] = 0;
        }else{
         heaps[i] = binary_min_heap<heapEle>(heap_buffer.data()+ (i*n), vertex_num, heap_LR.data()+ (i*n));
         heaps[i].heapify();
