@@ -17,6 +17,11 @@ int main(int argc, char *argv[]) {
 
     research_graph::in_memory::SymMatrix<double> W = research_graph::in_memory::IO::readSymMatrixFromFile<double>(filename, n); 
 
+    parlay::parallel_for(0, W.distmat_size, [&](size_t i){
+        W.distmat[i] = sqrt(2*(1-W.distmat[i]));
+    });
+
+
     timer t1;t1.start();
     vector<research_graph::in_memory::dendroLine> dendro;
 

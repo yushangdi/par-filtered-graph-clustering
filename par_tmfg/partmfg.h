@@ -30,6 +30,12 @@ struct ParTMFG{
     using gainT=tuple<vtx, T, face>; 
     using heapEle=pair<T, vtx>;
     using heapT=binary_min_heap<heapEle>;
+    // struct entry {
+    // using key_t = heapEle;
+    // static bool comp(key_t a, key_t b) { 
+    //     return a < b;}
+    // };
+    // using heapT=pam_set<entry>;
     SymM<T>* W;
     sequence<tuple<vtx,vtx,T>> P;
     sequence<gainT> max_clique_gains;
@@ -199,23 +205,14 @@ struct ParTMFG{
     sequence<heapT> heaps;
     sequence<heapEle> heap_buffer;
     sequence<size_t> heap_LR;
-    // sequence<size_t> heap_R;
-    // sequence<size_t> heap_map; //map from face id to start location in heap_buffer, used for compact optimization
-    // can we optimize the heap, since we only need heapify and pop?
-    // sort and move is not optimimal, because we might need only a few pop
+    bool use_sorted_list = true; // change to input
+    sequence<size_t> sorted_list_pointer; // stores the next vertex to look at
+
 
     //allocate space for heap
     void initHeap();
     void initGainArrayHeap();
     void updateGainArrayHeap(sequence<size_t> &insert_list);
-
-    //get the ind-th element in the heap buffer of face i
-    //negate because the heap is min heap, so started valyue was negated
-    inline heapEle getHeapEle(face i, size_t ind){
-        // size_t start = heap_map[i];
-        size_t start = i*n;
-        return negateGain(heap_buffer[start+ind]);
-    }
 
     inline heapEle negateGain(heapEle ele){
         return heapEle(-1.0*ele.first, ele.second);
@@ -229,14 +226,22 @@ struct ParTMFG{
         pf->incFindMinNum();
         heapEle ele;
         do {
-#ifdef DEBUG
-    if(heaps[i].size==0){
-        cout << "0 size heap!" <<endl;
-    }
-#endif
+// #ifdef DEBUG
+//     if(heaps[i].size == 0){
+//         cout << "0 size heap!" <<endl;
+//     }
+// #endif
+            if(use_sorted_list){ 
+                size_t ind = sorted_list_pointer[i];
+                sorted_list_pointer[i]++;
+                ele = heap_buffer[i*n+ind];
+            }else{
             size_t ind = heaps[i].argmin();
             ele = heap_buffer[i*n+ind];
             heaps[i].heap_pop();
+            // ele = *heaps[i].select(0);
+            // heaps[i]=heapT::remove(move(heaps[i]), ele);
+            }
         }
         while ( !vertex_flag[ele.second] );
 // #ifdef PROFILE
@@ -259,10 +264,19 @@ struct ParTMFG{
             vtx v = in[v_ind];
             T gain = computeGain(v, t);
             heap_buffer[i*n+v_ind] = heapEle(-1.0*gain, v);
-            // setHeapEle(i, v_ind, heapEle(gain, v));
         });
+        if(use_sorted_list){
+        // parlay::sort_inplace(make_slice(heap_buffer).cut(i*n, i*n+vertex_num));
+        // parlay::internal::seq_sort_inplace(make_slice(heap_buffer).cut(i*n, i*n+vertex_num), std::less<heapEle>{}, false);
+        parlay::internal::quicksort(make_slice(heap_buffer).cut(i*n, i*n+vertex_num), std::less<heapEle>{});
+        sorted_list_pointer[i] = 0;
+       }else{
         heaps[i] = binary_min_heap<heapEle>(heap_buffer.data()+ (i*n), vertex_num, heap_LR.data()+ (i*n));
         heaps[i].heapify();
+        // heaps[i] = heapT();
+        // heaps[i] = heapT::multi_insert(move(heaps[i]), make_slice(heap_buffer).cut(i*n, i*n+vertex_num));
+       }
+
 // #ifdef PROFILE
 //         // pf->incHeapifyTime(t1.next());
 //         cout << vertex_num << endl;

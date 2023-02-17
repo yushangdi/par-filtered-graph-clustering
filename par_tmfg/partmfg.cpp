@@ -109,7 +109,7 @@ void ParTMFG<T, PROF>::updateGainArrayHeap(sequence<size_t> &insert_list){
                 vtx new_v = result.second;
                 max_clique_gains[i] = make_tuple(new_v, result.first, i);
                 size_t num_faces = pbbs::write_add(&vtx_to_face_inds[new_v], 1);
-                face_store[num_faces-1+n*new_v] = i; 
+                face_store[num_faces-1+max_face_num*new_v] = i; 
             });
         });
     }
@@ -203,10 +203,10 @@ if(use_heap){
             face i = face_store[ii+max_face_num*v];
             if(i == tri || i >= triangles_ind -2 ){heapifyFace(i);}
             heapEle result = getMinValidHeapEle(i);
-            vtx v = result.second;
-            max_clique_gains[i] = make_tuple(v, result.first, i);
-            size_t num_faces = pbbs::write_add(&vtx_to_face_inds[v], 1);
-            face_store[num_faces-1+max_face_num*v] = i;
+            vtx new_v = result.second;
+            max_clique_gains[i] = make_tuple(new_v, result.first, i);
+            size_t num_faces = pbbs::write_add(&vtx_to_face_inds[new_v], 1);
+            face_store[num_faces-1+max_face_num*new_v] = i;
         });
 }else{
         auto in = make_slice(vertex_list).cut(vertex_start, vertex_start+vertex_num);
@@ -214,10 +214,10 @@ if(use_heap){
         parlay::parallel_for(0, vtx_to_face_inds[v], [&](size_t ii) {
             face i = face_store[ii+max_face_num*v];
             pair<vtx, T> result = getBestGain(in, triangles[i]);
-            vtx v = result.first;
-            max_clique_gains[i] = make_tuple(v, result.second, i);
-            size_t num_faces = pbbs::write_add(&vtx_to_face_inds[v], 1);
-            face_store[num_faces-1+max_face_num*v] = i;
+            vtx new_v = result.first;
+            max_clique_gains[i] = make_tuple(new_v, result.second, i);
+            size_t num_faces = pbbs::write_add(&vtx_to_face_inds[new_v], 1);
+            face_store[num_faces-1+max_face_num*new_v] = i;
         });
 } //end else use_heap
 }
@@ -266,8 +266,13 @@ void ParTMFG<T, PROF>::init(){
 template<class T, class PROF> 
 void ParTMFG<T, PROF>::initHeap(){
     heap_buffer = sequence<heapEle>::uninitialized(3*n*n); 
+    if(use_sorted_list){
+        sorted_list_pointer=sequence<size_t>(3*n, 0);
+    }else{
     heap_LR = sequence<size_t>::uninitialized(3*n*n);
-    heaps=sequence<heapT>::uninitialized(n);
+    heaps=sequence<heapT>::uninitialized(3*n);
+        // heaps=sequence<heapT>(3*n); for PAM
+    }
 }
 
 template<class T, class PROF> 

@@ -40,3 +40,4 @@ Aste/outputs/*
 par_tmfg/outputs/*
 
 */.DS_Store
+pam_example.cpp

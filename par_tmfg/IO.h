@@ -69,7 +69,8 @@ namespace IO {
     SymM<T> matrix = SymM<T>(n);
     parlay::parallel_for(0, n, [&](size_t i){
         parlay::parallel_for(i+1, n,[&] (size_t j){
-	        matrix.update(i, j, (T)atof(W[i*n + j]));
+	        // matrix.update(i, j, (T)atof(W[i*n + j]));
+          matrix.update(i, j, (T)W[i*n + j]);
         });
     });
     return matrix;
@@ -78,8 +79,11 @@ namespace IO {
   // read a symmatric matrix from file
   template <class T>
   SymM<T> readSymMatrixFromFile(char const *fname, std::size_t n) {
-    parlay::sequence<char> S = readStringFromFile(fname);
-    parlay::sequence<char*> W = stringToWords(S);
+    // parlay::sequence<char> S = readStringFromFile(fname);
+    // parlay::sequence<char*> W = stringToWords(S);
+    parlay::sequence<double> W = parlay::sequence<double>(n*n);
+    std::ifstream myFile (fname, ios::in | ios::binary);
+    myFile.read((char*)W.data(), sizeof(double) * n*n);
     if (W.size() == 0) {
       cout << "readPointsFromFile empty file" << endl;
       abort();
