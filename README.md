@@ -18,6 +18,7 @@ Each folder contains an implementation that we tested.
 `Aste` Aste's MATLAB TMFG+DBHT implementation. This is modified from [DBHT](https://www.mathworks.com/matlabcentral/fileexchange/46750-dbht)
 and [PMFG](https://www.mathworks.com/matlabcentral/fileexchange/38689-pmfg). The modifications include adding timers for benchmarking and substitute some subroutines for better performance. Speficically, we changed Aste's TMFG+DBHT implementation (DBHTs.m file) to use boost library's all pair's shortest path and breadth-first search implementation, because this gives significant speedup. Aste's MATLAB PMFG+DBHT implementation also uses boost's implementation.
 
+`mpi-scalablekmeanspp` the C++ implmentation of k-means++.
 
 ## Installation Requirement
 
@@ -87,8 +88,8 @@ PARLAY_NUM_THREADS=`wk` numactl -i all ./tmfg `S` `output` `n` `D` `method` `pre
 ```bash
 cd par_tmfg
 make
-PARLAY_NUM_THREADS=${wk} numactl -i all ./tmfg ../datasets/iris-R.csv outputs/iris-R 150 0 prefix 2 1
-PARLAY_NUM_THREADS=1 ./tmfg ../datasets/iris-R.csv outputs/iris-R 150 0 exact 0 1
+PARLAY_NUM_THREADS=${wk} numactl -i all ./tmfg ../datasets/CBF.dat outputs/CBF 930 0 prefix 2 1
+PARLAY_NUM_THREADS=1 ./tmfg ../datasets/CBF.dat outputs/CBF 930 0 exact 0 1
 ```
 
 ## To run Aste's implementation of TMFG/PMFG+DBHT:
@@ -109,11 +110,12 @@ matlab -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG("iris", "../datase
 
 ## To run KMeans:
 
+The C++ k-means++ code is in mpi-scalablekmeanspp/ folder.
+
+## To run KMeans+Spectral:
+
 ```python
 from sklearn.cluster import SpectralClustering
-from sklearn.cluster import KMeans
-
-KMeans(n_clusters=k, random_state=0).fit(X)
 
 SpectralClustering(n_clusters=k, affinity="nearest_neighbors",
                                 n_neighbors=n_neighbor,

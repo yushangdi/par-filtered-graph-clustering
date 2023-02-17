@@ -54,5 +54,3 @@ for dataset in "${datasets[@]}"; do
     eval "$command"
 done
 done
-
-#  mpiexec -np 96 ./mpi_main -i /home/ubuntu/datasets/UCR/Mallat_X.dat -b -n 8 -o
