@@ -1,3 +1,6 @@
 [submodule "parlaylib"]
 	path = parlaylib
 	url = https://github.com/yushangdi/parlaylib.git
+[submodule "mpi-scalablekmeanspp"]
+	path = mpi-scalablekmeanspp
+	url = https://github.com/yushangdi/mpi-scalablekmeanspp

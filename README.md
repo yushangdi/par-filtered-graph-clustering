@@ -18,6 +18,7 @@ Each folder contains an implementation that we tested.
 `Aste` Aste's MATLAB TMFG+DBHT implementation. This is modified from [DBHT](https://www.mathworks.com/matlabcentral/fileexchange/46750-dbht)
 and [PMFG](https://www.mathworks.com/matlabcentral/fileexchange/38689-pmfg). The modifications include adding timers for benchmarking and substitute some subroutines for better performance. Speficically, we changed Aste's TMFG+DBHT implementation (DBHTs.m file) to use boost library's all pair's shortest path and breadth-first search implementation, because this gives significant speedup. Aste's MATLAB PMFG+DBHT implementation also uses boost's implementation.
 
+`mpi-scalablekmeanspp` the C++ implmentation of k-means++.
 
 ## Installation Requirement
 
@@ -54,7 +55,7 @@ PARLAY_NUM_THREADS=`wk` numactl -i all ./linkage `dataset` `n` `outpout` `method
 
 * `wk` is the number of workers to use
 * `numactl -i all` is optional 
-* `dataset` is the file name of the input distance matrix
+* `dataset` is the file name of the input distance matrix (in binary format)
 * `n` is the number of data points
 * `output` is the file name of the output file for the resulting dendrogram
 * `method` can be "comp" or "avg" for complete linkage and average linkage respectively
@@ -64,7 +65,7 @@ PARLAY_NUM_THREADS=`wk` numactl -i all ./linkage `dataset` `n` `outpout` `method
 ```bash
 cd hac/general_hac
 make
-PARLAY_NUM_THREADS=${wk} numactl -i all ./linkage ../../datasets/iris-D.csv 150 outputs/iris-D_comp_dendro comp 1
+PARLAY_NUM_THREADS=${wk} numactl -i all ./linkage ../../datasets/CBF.dat 930 outputs/CBF_comp_dendro comp 1
 ```
 
 
@@ -76,7 +77,7 @@ PARLAY_NUM_THREADS=`wk` numactl -i all ./tmfg `S` `output` `n` `D` `method` `pre
 
 * `wk` is the number of workers to use
 * `numactl -i all` is optional 
-* `S` is the file name of the input similarity matrix
+* `S` is the file name of the input similarity matrix (in binary format)
 * `output` is the file name prefix of the output file for the resulting dendrogram (-Z) and the resulting TMFG (-P). The outputs are going to be saved folders "par_tmfg/outputs/Ps/" and "par_tmfg/outputs/Zs/", so these two folders should be created in advance.
 * `n` is the number of data points
 * `D` is the file name of the input dissimilarity matrix. If D=0, will use D = sqrt(2(1-s))
@@ -87,8 +88,8 @@ PARLAY_NUM_THREADS=`wk` numactl -i all ./tmfg `S` `output` `n` `D` `method` `pre
 ```bash
 cd par_tmfg
 make
-PARLAY_NUM_THREADS=${wk} numactl -i all ./tmfg ../datasets/iris-R.csv outputs/iris-R 150 0 prefix 2 1
-PARLAY_NUM_THREADS=1 ./tmfg ../datasets/iris-R.csv outputs/iris-R 150 0 exact 0 1
+PARLAY_NUM_THREADS=${wk} numactl -i all ./tmfg ../datasets/CBF.dat outputs/CBF 930 0 prefix 2 1
+PARLAY_NUM_THREADS=1 ./tmfg ../datasets/CBF.dat outputs/CBF 930 0 exact 0 1
 ```
 
 ## To run Aste's implementation of TMFG/PMFG+DBHT:
@@ -109,11 +110,12 @@ matlab -nojvm -nosplash -nodesktop  -nodisplay  -r  'UCR_TMFG("iris", "../datase
 
 ## To run KMeans:
 
+The C++ k-means++ code is in mpi-scalablekmeanspp/ folder.
+
+## To run KMeans+Spectral:
+
 ```python
 from sklearn.cluster import SpectralClustering
-from sklearn.cluster import KMeans
-
-KMeans(n_clusters=k, random_state=0).fit(X)
 
 SpectralClustering(n_clusters=k, affinity="nearest_neighbors",
                                 n_neighbors=n_neighbor,
